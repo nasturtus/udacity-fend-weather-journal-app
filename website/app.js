@@ -29,12 +29,11 @@ const getData = async (e) => {
       content: feelings,
     });
   } catch (err) {
-    console.log("Error happened here: ", err);
+    console.log("Error in getData: ", err);
   }
 };
 
 const postData = async (url, data) => {
-  console.log("in postdata");
   const response = await fetch(url, {
     method: "POST",
     credentials: "same-origin",
@@ -48,20 +47,27 @@ const postData = async (url, data) => {
     const latestData = await response.json();
     console.log("Latest data received from server");
     console.log(latestData);
-    updateUI(latestData);
+    updateUI();
   } catch (err) {
-    console.log("Error happened here: ", err);
+    console.log("Error in postData: ", err);
   }
 };
 
-const updateUI = (data) => {
-  document.querySelector("#date").innerText = data.date;
-  document.querySelector(
-    "#temp"
-  ).innerText = `Temperature (celsius): ${data.temperature}`;
-  document.querySelector(
-    "#content"
-  ).innerText = `I am feeling: ${data.content}`;
+const updateUI = async () => {
+  const response = await fetch("/getLatestData");
+
+  try {
+    data = await response.json();
+    document.querySelector("#date").innerHTML = data.date;
+    document.querySelector(
+      "#temp"
+    ).innerHTML = `Temperature (celsius): ${data.temperature}`;
+    document.querySelector(
+      "#content"
+    ).innerHTML = `I am feeling: ${data.content}`;
+  } catch (err) {
+    console.log("Error in updateUI: ", err);
+  }
 };
 
 document.querySelector("#generate").addEventListener("click", getData);
