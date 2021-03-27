@@ -11,7 +11,6 @@ app.use(express.static("website"));
 
 // dependencies
 const cors = require("cors");
-const { response } = require("express");
 app.use(cors());
 
 // create server
